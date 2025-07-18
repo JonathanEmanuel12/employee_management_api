@@ -7,3 +7,10 @@ export const signUpValidator = vine.compile(
         password: vine.string().minLength(6)
     })
 )
+
+export const signInValidator = vine.compile(
+    vine.object({
+        email: vine.string().email(),
+        password: vine.string()
+    })
+)
