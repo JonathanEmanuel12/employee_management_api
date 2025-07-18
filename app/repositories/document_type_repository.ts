@@ -4,4 +4,8 @@ export default class DocumentTypeRepository {
     public async create(name: string): Promise<DocumentType> {
         return await DocumentType.create({ name })
     }
+
+    public async index(): Promise<DocumentType[]> {
+        return await DocumentType.query()
+    }
 }

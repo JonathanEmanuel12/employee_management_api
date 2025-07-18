@@ -14,4 +14,9 @@ export default class DocumentTypeController {
         const documentType = await this.documentTypeRepository.create(name)
         return response.created(documentType)
     }
+
+    public async index({ response }: HttpContext) {
+        const documentTypes = await this.documentTypeRepository.index()
+        return response.ok(documentTypes)
+    }
 }
