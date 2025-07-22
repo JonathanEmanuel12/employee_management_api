@@ -1,8 +1,9 @@
 import Employee from "#models/employee";
 import db from "@adonisjs/lucid/services/db";
-import { CreateEmployeeDto, UpdateEmployeeDto } from "../dto/employee_dto.js";
+import { CreateEmployeeDto, UpdateDocumentDto, UpdateEmployeeDto } from "../dto/employee_dto.js";
 import { DocumentStatus } from "../utils/enums.js";
 import { TransactionClientContract } from "@adonisjs/lucid/types/database";
+import Document from "#models/document";
 
 export default class EmployeeRepository {
     public async create(employeeDto: CreateEmployeeDto, attachDocumentTypeIds?: number[]): Promise<Employee> {
@@ -40,6 +41,10 @@ export default class EmployeeRepository {
             .where('id', employeeId)
             .preload('documents')
             .firstOrFail()
+    }
+
+    public async updateDocument(document: Document, documentDto: UpdateDocumentDto): Promise<void> {
+        await document.merge(documentDto).save()
     }
 
     private async attachDocumentTypes(employee: Employee, attachDocumentTypeIds: number[], trx: TransactionClientContract): Promise<void> {

@@ -13,3 +13,10 @@ export const updateEmployeeValidator = vine.compile(
         hiredAt: vine.date({ formats: 'YYYY-MM-DD HH:mm:ss' }).transform((date) => DateTime.fromJSDate(date)).optional()
     })
 )
+
+export const sendDocumentValidator = vine.compile(
+    vine.object({
+        identifier: vine.string(),
+        documentTypeId: vine.number().exists({ table: 'document_types', column: 'id' })
+    })
+)

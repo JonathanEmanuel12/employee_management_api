@@ -1,15 +1,17 @@
 import type { HttpContext } from "@adonisjs/core/http";
 import { inject } from "@adonisjs/core";
-import { createEmployeeValidator, updateEmployeeValidator } from "#validators/employee_validator";
+import { createEmployeeValidator, sendDocumentValidator, updateEmployeeValidator } from "#validators/employee_validator";
 import CreateEmployeeUseCase from "../use_cases/employee/create_employee_use_case.js";
 import { attachDocumentTypeValidator, detachDocumentTypeValidator } from "#validators/document_type_validator";
 import UpdateEmployeeUseCase from "../use_cases/employee/update_employee_use_case.js";
+import SendDocumentUseCase from "../use_cases/employee/send_document_use_case.js";
 
 @inject()
 export default class EmployeeController {
     constructor(
         private readonly createEmployeeUseCase: CreateEmployeeUseCase,
-        private readonly updateEmployeeUseCase: UpdateEmployeeUseCase
+        private readonly updateEmployeeUseCase: UpdateEmployeeUseCase,
+        private readonly sendDocumentUseCase: SendDocumentUseCase
     ) {}
 
     public async create({ request, response }: HttpContext) {
@@ -27,6 +29,13 @@ export default class EmployeeController {
         const { detachDocumentTypeIds } = await request.validateUsing(detachDocumentTypeValidator)
 
         const employee = await this.updateEmployeeUseCase.run(employeeId, employeeDto, attachDocumentTypeIds, detachDocumentTypeIds)
+        return response.created(employee)
+    }
+
+    public async sendDocument({ params, request, response }: HttpContext) {
+        const { employeeId } = params
+        const { identifier, documentTypeId } = await request.validateUsing(sendDocumentValidator)
+        const employee = await this.sendDocumentUseCase.run(employeeId, documentTypeId, identifier)
         return response.created(employee)
     }
 }

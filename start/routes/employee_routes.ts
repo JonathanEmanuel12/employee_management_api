@@ -4,5 +4,6 @@ import router from '@adonisjs/core/services/router'
 router.group(() => {
     router.post('/', [EmployeeController, 'create'])
     router.put('/:employeeId', [EmployeeController, 'update'])
+    router.put('/:employeeId/document', [EmployeeController, 'sendDocument'])
 })
     .prefix('employee')
