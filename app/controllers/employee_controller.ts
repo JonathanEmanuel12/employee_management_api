@@ -5,13 +5,15 @@ import CreateEmployeeUseCase from "../use_cases/employee/create_employee_use_cas
 import { attachDocumentTypeValidator, detachDocumentTypeValidator } from "#validators/document_type_validator";
 import UpdateEmployeeUseCase from "../use_cases/employee/update_employee_use_case.js";
 import SendDocumentUseCase from "../use_cases/employee/send_document_use_case.js";
+import EmployeeRepository from "../repositories/employee_repository.js";
 
 @inject()
 export default class EmployeeController {
     constructor(
         private readonly createEmployeeUseCase: CreateEmployeeUseCase,
         private readonly updateEmployeeUseCase: UpdateEmployeeUseCase,
-        private readonly sendDocumentUseCase: SendDocumentUseCase
+        private readonly sendDocumentUseCase: SendDocumentUseCase,
+        private readonly employeeRepository: EmployeeRepository
     ) {}
 
     public async create({ request, response }: HttpContext) {
@@ -28,14 +30,20 @@ export default class EmployeeController {
         const { attachDocumentTypeIds } = await request.validateUsing(attachDocumentTypeValidator)
         const { detachDocumentTypeIds } = await request.validateUsing(detachDocumentTypeValidator)
 
-        const employee = await this.updateEmployeeUseCase.run(employeeId, employeeDto, attachDocumentTypeIds, detachDocumentTypeIds)
-        return response.created(employee)
+        await this.updateEmployeeUseCase.run(employeeId, employeeDto, attachDocumentTypeIds, detachDocumentTypeIds)
+        return response.noContent()
+    }
+
+    public async show({ params, response }: HttpContext) {
+        const { employeeId } = params
+        const employee = await this.employeeRepository.get(employeeId)
+        return response.ok(employee)
     }
 
     public async sendDocument({ params, request, response }: HttpContext) {
         const { employeeId } = params
         const { identifier, documentTypeId } = await request.validateUsing(sendDocumentValidator)
-        const employee = await this.sendDocumentUseCase.run(employeeId, documentTypeId, identifier)
-        return response.created(employee)
+        await this.sendDocumentUseCase.run(employeeId, documentTypeId, identifier)
+        return response.noContent()
     }
 }
