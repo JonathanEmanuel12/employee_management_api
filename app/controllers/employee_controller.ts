@@ -1,6 +1,6 @@
 import type { HttpContext } from "@adonisjs/core/http";
 import { inject } from "@adonisjs/core";
-import { createEmployeeValidator, sendDocumentValidator, updateEmployeeValidator } from "#validators/employee_validator";
+import { createEmployeeValidator, indexEmployeeValidator, sendDocumentValidator, updateEmployeeValidator } from "#validators/employee_validator";
 import CreateEmployeeUseCase from "../use_cases/employee/create_employee_use_case.js";
 import { attachDocumentTypeValidator, detachDocumentTypeValidator } from "#validators/document_type_validator";
 import UpdateEmployeeUseCase from "../use_cases/employee/update_employee_use_case.js";
@@ -38,6 +38,12 @@ export default class EmployeeController {
         const { employeeId } = params
         const employee = await this.employeeRepository.get(employeeId)
         return response.ok(employee)
+    }
+
+    public async index({ request, response }: HttpContext) {
+        const { search = '', page = 1, perPage = 10, documentTypeId } = await request.validateUsing(indexEmployeeValidator)
+        const employees = await this.employeeRepository.index(search, page, perPage, documentTypeId)
+        return response.ok(employees)
     }
 
     public async sendDocument({ params, request, response }: HttpContext) {

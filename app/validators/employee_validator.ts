@@ -20,3 +20,12 @@ export const sendDocumentValidator = vine.compile(
         documentTypeId: vine.number().exists({ table: 'document_types', column: 'id' })
     })
 )
+
+export const indexEmployeeValidator = vine.compile(
+    vine.object({
+        search: vine.string().optional(),
+        page: vine.number().optional(),
+        perPage: vine.number().optional(),
+        documentTypeId: vine.number().exists({ table: 'document_types', column: 'id' }).optional()
+    })
+)

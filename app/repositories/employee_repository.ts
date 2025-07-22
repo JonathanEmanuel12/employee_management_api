@@ -43,6 +43,25 @@ export default class EmployeeRepository {
             .firstOrFail()
     }
 
+    public async index(search: string, page: number, perPage: number, documentTypeId?: number): Promise<Employee[]> {
+        return await Employee.query()
+            .whereILike('name', `%${search}%`)
+            .andWhereHas('documents', (query) => {
+                query.where('status', DocumentStatus.PENDING)
+                if(documentTypeId !== undefined) {
+                    query.where('documentTypeId', documentTypeId)                    
+                }
+            })
+            .preload('documents', (query) => {
+                query.where('status', DocumentStatus.PENDING)
+                query.preload('documentType')
+                if(documentTypeId !== undefined) {
+                    query.where('documentTypeId', documentTypeId)                    
+                }
+            })
+            .paginate(page, perPage)
+    }
+
     public async updateDocument(document: Document, documentDto: UpdateDocumentDto): Promise<void> {
         await document.merge(documentDto).save()
     }
