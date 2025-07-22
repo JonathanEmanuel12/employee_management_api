@@ -8,10 +8,10 @@ import { DateTime } from "luxon"
 export default class CreateEmployeeUseCase {
     constructor(
         private readonly employeeRepository: EmployeeRepository
-    ) {}
+    ) { }
 
-    public async run(employeeDto: Omit<CreateEmployeeDto, 'hiredAt'>): Promise<Employee> {
+    public async run(employeeDto: Omit<CreateEmployeeDto, 'hiredAt'>, attachDocumentTypeIds?: number[]): Promise<Employee> {
         const hiredAt = DateTime.now()
-        return await this.employeeRepository.create({ hiredAt, ...employeeDto })
+        return await this.employeeRepository.create({ hiredAt, ...employeeDto }, attachDocumentTypeIds)
     }
 }
