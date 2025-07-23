@@ -58,11 +58,13 @@ Obs: (base) = http://localhost:3333; ? = opcional; *()* Os parentêses embaixo d
 *(Enviar um documento relacionado ao tipo de documento e ao colaborador)*
 		body: { "identifier": string, "documentTypeId"?: number }
 
-## Comentários sobre a estrutura
+## Comentários sobre o projeto
 
 - O controller coordena quase todo o fluxo da requisição e resposta. Ele recebe os dados, valida com validators se necessário, chama o responsável por processar os dados e retorna a resposta.
 - Normalmente os use_cases são os responsáveis por processar a requisição, mas em casos mais simples é possível usar apenas uma chamada de método num repository. Ex: rota GET (base)/employee/:employeeId.
 - Chave primária incremental pode revelar a quantidade de registros, por isso usei uuid para as tabelas mais expostas e importantes.
+- O tratamento de erro foi feito usando as exceções do AdonisJS. Na maioria dos casos o próprio framework cuida disso (validators, queries no banco, autenticação), mas nos casos referentes a regras de negócio foi necessário implementar e lançar as exceções.
+- Rodando a api em modo de desenvolvimento alguns erros podem trazer um stack trace, mas isso não acontece em produção (NODE_ENV=production)
 
 ## Deploy
 
