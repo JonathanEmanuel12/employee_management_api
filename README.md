@@ -1,8 +1,15 @@
 # employee_management_api
 ###### API de Gerenciamento de documentação de colaboradores
 
+## Tecnologias
+
+- Nodejs v22
+- AdonisJS 6
+- Docker
+- Postgresql
+
 ## Como rodar o projeto
-Para rodar o projeto é necessário ter o NodeJs v22 e Docker instalado. É possível usar o Postgresql sem o Docker, mas é necessário colocar no arquivo .env as variáveis do banco.
+Para rodar o projeto é necessário ter o Nodejs v22 e Docker instalado. É possível usar o Postgresql sem o Docker, mas é necessário colocar no arquivo .env as variáveis do banco.
 
 - git clone git@github.com:JonathanEmanuel12/employee_management_api.git
 - cd employee_management_api/
@@ -56,3 +63,31 @@ Obs: (base) = http://localhost:3333; ? = opcional; *()* Os parentêses embaixo d
 - O controller coordena quase todo o fluxo da requisição e resposta. Ele recebe os dados, valida com validators se necessário, chama o responsável por processar os dados e retorna a resposta.
 - Normalmente os use_cases são os responsáveis por processar a requisição, mas em casos mais simples é possível usar apenas uma chamada de método num repository. Ex: rota GET (base)/employee/:employeeId.
 - Chave primária incremental pode revelar a quantidade de registros, por isso usei uuid para as tabelas mais expostas e importantes.
+
+## Deploy
+
+Costumo usar a Heroku e a AWS para fazer o deploy de api. Por não ter uma conta pessoal nessas plataformas e também por conta do tempo não irei configurar o deploy, mas vou colocar um passo a passo de como fazê-lo aqui no readme. 
+
+#### Heroku
+
+- Criar e configurar dyno para a api (definir stack e variáveis de ambiente)
+- Criar banco de dados Postgresql relacionado ao dyno na Heroku
+- Enviar código para o repositório da Heroku.
+- Ao enviar o código para a Heroku, estando tudo configurado corretamente, a api passará pela build e rodará. É necessário colocar no package.json um pre-start para rodar as migrações antes de iniciar a api.
+- É possível automatizar o processo de deploy pegando uma chave dentro do perfil do usuário e usando-a para fazer o git push por um pipeline no github, bitbucket ou outro serviço.
+
+#### AWS
+
+- Criar uma instância ec2
+- Puxar o código do github para a instância
+- Rodar o banco de dados
+- Rodar a api com pm2
+- Liberar porta 80 e 443 na instância
+- Configurar proxy reverso com nginx e um domínio
+- Configurar certificado ssl via certbot
+- É possível automatizar o processo de deploy configurando uma chave ssh no bitbucket, por exemplo, para rodar os comandos na instância via pipeline.
+- Daria pra usar um RDS para o banco de dados ou rodar a api de forma diferente, mas procurei fazer um passo a passo mais simplificado.
+
+## Testes automatizados
+
+O framework usado para fazer a api (Adonis 6) possui uma integração com o framework de teste japa.dev, mas os testes não foram implementados por conta do tempo.
