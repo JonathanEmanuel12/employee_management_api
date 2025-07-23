@@ -12,7 +12,9 @@ Para rodar o projeto é necessário ter o NodeJs v22 e Docker instalado. É poss
 - npm run dev
 
 ## Rotas da api
-Foi usado o Insomnia para os testes na api e o arquivo com a lista de rotas está na raiz do projeto, mas também as reproduzo aqui no readme. (base) = http://localhost:3333; ? = opcional; *()* Os parentêses embaixo de algumas rotas são as funcionalidades esperadas que estavam no texto do teste.
+Foi usado o Insomnia para os testes na api e o arquivo com a lista de rotas está na raiz do projeto, mas também as reproduzo aqui no readme por segurança porque o Insomnia pode ter problemas de compatibilidade.
+Em todas as rotas, com exceção das rotas /auth, é necessário o envio do Bearer token.
+Obs: (base) = http://localhost:3333; ? = opcional; *()* Os parentêses embaixo de algumas rotas são as funcionalidades esperadas que estavam no texto do teste.
 
 ###### - auth
 - POST (base)/auth/signUp
