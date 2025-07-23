@@ -16,6 +16,7 @@ Para rodar o projeto é necessário ter o Nodejs v22 e Docker instalado. É poss
 - npm install
 - criar arquivo .env e copiar conteúdo de .env.example para o .env
 - docker compose up -d
+- node ace migration:run
 - npm run dev
 
 ## Rotas da api
